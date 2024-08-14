@@ -1,5 +1,6 @@
 const letDict = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const FPS = 15;
+const effectInterval = 5000; // In milliseconds
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -14,35 +15,37 @@ function randStr(strLen) {
 }
 
 document.addEventListener('DOMContentLoaded', async function() {
+  while(true) {
+    runEl = document.getElementById("textRandLoad");
+    oldText = runEl.innerText;
 
-  runEl = document.getElementById("testLoad");
-  oldText = runEl.innerText;
-
-  effectText = randStr(oldText.length);
-  runEl.innerText = effectText;
-  runEl.style.display = 'unset';
-
-  effectTime = Date.now();
-  frameTime = Date.now();
-
-  charInd = 0;
-  frame = 0;
-  while(charInd < oldText.length) {
-    if(oldText[charInd] == " ") {charInd++; effectTime = Date.now()}
-
-    const effectSpeed = 400; //In milliseconds
-    effectText = (effectText.substring(0, charInd+1) + randStr(oldText.length - charInd - 1)).substring(0, oldText.length);
+    effectText = randStr(oldText.length);
     runEl.innerText = effectText;
+    runEl.style.display = 'unset';
 
-    if(Date.now() - effectSpeed >= effectTime) {
-      effectText = (oldText.substring(0, charInd+1) + effectText.substring(charInd+1)).substring(0, oldText.length);
+    effectTime = Date.now();
+    frameTime = Date.now();
+
+    charInd = 0;
+    frame = 0;
+    while(charInd < oldText.length) {
+      if(oldText[charInd] == " ") {charInd++; effectTime = Date.now()}
+
+      const effectSpeed = 200; //In milliseconds
+      effectText = (effectText.substring(0, charInd+1) + randStr(oldText.length - charInd - 1)).substring(0, oldText.length);
       runEl.innerText = effectText;
-      charInd += 1;
-      effectTime = Date.now();
-    }
 
-    if(Date.now() - 1000/FPS < frameTime) { await sleep(frameTime - Date.now() + 1000/FPS); frameTime = Date.now(); }
-    frame += 1;
-    // console.log(frame);
+      if(Date.now() - effectSpeed >= effectTime) {
+        effectText = (oldText.substring(0, charInd+1) + effectText.substring(charInd+1)).substring(0, oldText.length);
+        runEl.innerText = effectText;
+        charInd += 1;
+        effectTime = Date.now();
+      }
+
+      if(Date.now() - 1000/FPS < frameTime) { await sleep(frameTime - Date.now() + 1000/FPS); frameTime = Date.now(); }
+      frame += 1;
+      // console.log(frame);
+    }
+    await sleep(effectInterval);
   }
 });
