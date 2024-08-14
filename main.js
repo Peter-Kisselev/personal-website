@@ -1,6 +1,6 @@
 const letDict = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const FPS = 15;
-const effectInterval = 5000; // In milliseconds
+const effectWait = 5000; // In milliseconds
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
